@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Viral</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🔥 Search Viral</div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="viral">Virais por nicho</button>
+    <button class="tab" data-tab="research">Relatório de tema</button>
+    <button class="tab" data-tab="history">Histórico</button>
+  </nav>
+  <div id="status" class="status"></div>
+</header>
+
+<main>
+  <!-- Virais por nicho -->
+  <section id="tab-viral" class="panel active">
+    <form id="viral-form" class="card form">
+      <div class="row">
+        <label class="grow">Nicho
+          <input name="niche" required minlength="2" maxlength="100" placeholder="ex.: finanças pessoais, receitas fit, marketing digital">
+        </label>
+        <label class="grow">Palavras extras (opcional)
+          <input name="keywords" maxlength="150" placeholder="ex.: iniciantes, 2026">
+        </label>
+      </div>
+      <div class="row">
+        <fieldset>
+          <legend>Redes</legend>
+          <label class="check"><input type="checkbox" name="platforms" value="youtube" checked> YouTube</label>
+          <label class="check needs-apify"><input type="checkbox" name="platforms" value="instagram"> Instagram</label>
+          <label class="check needs-apify"><input type="checkbox" name="platforms" value="twitter"> X/Twitter</label>
+        </fieldset>
+        <label>Período
+          <select name="period">
+            <option value="week">Última semana</option>
+            <option value="month" selected>Último mês</option>
+            <option value="year">Último ano</option>
+            <option value="day">Últimas 24h</option>
+            <option value="any">Qualquer data</option>
+          </select>
+        </label>
+        <label>Qtd. por rede
+          <input type="number" name="limit" value="30" min="5" max="80">
+        </label>
+        <label class="check ai-toggle"><input type="checkbox" name="use_ai"> Gerar estudo com IA</label>
+        <button type="submit" class="primary">Buscar virais</button>
+      </div>
+      <p class="hint" id="apify-hint" hidden>Instagram e X precisam de <code>APIFY_TOKEN</code> no <code>.env</code>.</p>
+    </form>
+    <div id="viral-progress" class="progress" hidden></div>
+    <div id="viral-result"></div>
+  </section>
+
+  <!-- Relatório de tema -->
+  <section id="tab-research" class="panel">
+    <form id="research-form" class="card form">
+      <div class="row">
+        <label class="grow">Tema
+          <input name="topic" required minlength="2" maxlength="200" placeholder="ex.: inteligência artificial na educação">
+        </label>
+        <label>Fontes
+          <input type="number" name="depth" value="8" min="3" max="20">
+        </label>
+        <label class="check"><input type="checkbox" name="include_videos" checked> Incluir vídeos</label>
+        <label class="check ai-toggle"><input type="checkbox" name="use_ai"> Redigir com IA</label>
+        <button type="submit" class="primary">Gerar relatório</button>
+      </div>
+    </form>
+    <div id="research-progress" class="progress" hidden></div>
+    <div id="research-result"></div>
+  </section>
+
+  <!-- Histórico -->
+  <section id="tab-history" class="panel">
+    <div class="card"><ul id="history-list" class="history"></ul></div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
