@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from datetime import datetime
 
 
@@ -23,6 +23,7 @@ class Post:
     thumbnail: str = ""
     hashtags: list[str] = field(default_factory=list)
     opening: str = ""  # primeiros segundos falados (legenda), quando disponível
+    transcript: list = field(default_factory=list)  # [[segundo, palavra], ...] (só no modo Shorts)
     is_video: bool = True
 
     # Preenchidos pela análise
@@ -37,6 +38,15 @@ class Post:
             return self.title
         first = (self.text or "").strip().splitlines()
         return first[0][:200] if first else ""
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Post":
+        """Reconstrói um Post salvo no histórico (inverso de to_dict)."""
+        names = {f.name for f in fields(cls)}
+        data = {k: v for k, v in d.items() if k in names}
+        if data.get("published_at"):
+            data["published_at"] = datetime.fromisoformat(data["published_at"])
+        return cls(**data)
 
     def to_dict(self) -> dict:
         d = asdict(self)

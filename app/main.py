@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from . import db, jobs
 from .config import ROOT, settings
-from .services import research, viral
+from .services import research, shorts, viral
 from .services.render import to_html
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -45,6 +45,33 @@ class ResearchRequest(BaseModel):
     include_videos: bool = True
 
 
+class ShortsRequest(BaseModel):
+    niche: str = Field(min_length=2, max_length=100)
+    keywords: str = Field(default="", max_length=150)
+    period: str = "month"
+    limit: int = Field(default=30, ge=5, le=120)
+    use_ai: bool = False
+
+
+class XrayRequest(BaseModel):
+    url: str = Field(min_length=10, max_length=300)
+    benchmark_id: int | None = None
+    limit: int = Field(default=20, ge=5, le=60)  # usado quando o link é de um canal
+    use_ai: bool = False
+
+
+def _shorts_job(req: ShortsRequest, progress) -> int:
+    result = shorts.run_niche(req.niche.strip(), req.keywords.strip(), req.period, req.limit, req.use_ai, progress)
+    return db.save_search("shorts", req.niche.strip(), result["params"], result)
+
+
+def _xray_job(req: XrayRequest, progress) -> int:
+    result = shorts.run_xray(req.url.strip(), req.benchmark_id, req.use_ai, req.limit, progress)
+    if result["params"]["mode"] == "channel":
+        return db.save_search("shorts", f"Canal: {result['params']['niche']}", result["params"], result)
+    return db.save_search("short_xray", result["title"][:120] or req.url, result["params"], result)
+
+
 def _viral_job(req: ViralRequest, progress) -> int:
     result = viral.run(req.niche.strip(), req.keywords.strip(), req.platforms, req.period, req.limit, req.use_ai, progress)
     return db.save_search("viral", req.niche.strip(), result["params"], result)
@@ -76,6 +103,36 @@ def start_viral(req: ViralRequest):
 @app.post("/api/research")
 def start_research(req: ResearchRequest):
     return {"job_id": jobs.submit(_research_job, req)}
+
+
+@app.post("/api/shorts")
+def start_shorts(req: ShortsRequest):
+    if req.period not in PERIODS:
+        raise HTTPException(400, "Período inválido")
+    req.limit = min(req.limit, settings.shorts_limit_max)
+    return {"job_id": jobs.submit(_shorts_job, req)}
+
+
+@app.post("/api/shorts/xray")
+def start_xray(req: XrayRequest):
+    url = req.url.strip()
+    if not re.match(r"^https?://([\w-]+\.)?(youtube\.com|youtu\.be)/", url, re.IGNORECASE):
+        raise HTTPException(400, "Use um link do YouTube (Short, vídeo ou canal).")
+    return {"job_id": jobs.submit(_xray_job, req)}
+
+
+@app.post("/api/searches/{search_id}/retry-speech")
+def retry_speech(search_id: int):
+    s = db.get_search(search_id)
+    if not s or s["kind"] not in ("shorts", "short_xray"):
+        raise HTTPException(404, "Estudo de Shorts não encontrado")
+    return {"job_id": jobs.submit(shorts.retry_speech, search_id)}
+
+
+@app.get("/api/shorts/benchmarks")
+def shorts_benchmarks():
+    """Estudos de Shorts salvos, para comparar no raio-X."""
+    return [s for s in db.list_searches(100) if s["kind"] == "shorts"]
 
 
 @app.get("/api/jobs/{job_id}")

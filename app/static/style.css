@@ -88,6 +88,20 @@ button.ghost:hover { border-color: var(--muted); }
 .badge { font-size: 11px; background: #232836; border: 1px solid var(--line); padding: 1px 7px; border-radius: 20px; color: #c9cede; }
 .badge.fmt { border-color: #3a4f7a; }
 
+.mode-switch { margin-bottom: 12px; }
+.post .thumb.vertical { aspect-ratio: 9/12; }
+.post .shortstats { font-size: 12px; color: var(--muted); }
+
+/* linha do tempo do raio-X */
+.timeline { display: flex; gap: 3px; margin: 4px 0 18px; }
+.timeline .ph { border-radius: 6px; padding: 8px 10px; min-width: 70px; font-size: 12px; overflow: hidden; }
+.timeline .ph b { display: block; font-size: 12px; margin-bottom: 4px; }
+.timeline .ph span { color: #d9dcea; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.timeline .Gancho { background: #5a1f14; border: 1px solid var(--accent); }
+.timeline .Contexto { background: #4a3a12; border: 1px solid var(--accent-2); }
+.timeline .Desenvolvimento { background: #1d2a44; border: 1px solid #3a4f7a; }
+.timeline .Final { background: #163a2e; border: 1px solid var(--ok); }
+
 .history { list-style: none; margin: 0; padding: 0; }
 .history li { display: flex; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); }
 .history li:last-child { border-bottom: 0; }

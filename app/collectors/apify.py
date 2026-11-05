@@ -8,13 +8,12 @@ As duas redes exigem login e bloqueiam scraping direto, então usamos o Apify
 from __future__ import annotations
 
 import logging
-import re
-import unicodedata
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 
 import httpx
 
+from ..analysis.text import niche_to_hashtag
 from ..config import settings
 from .models import Post
 
@@ -71,11 +70,6 @@ def _parse_date(value) -> datetime | None:
         return datetime.strptime(s, "%a %b %d %H:%M:%S %z %Y")
     except ValueError:
         return None
-
-
-def niche_to_hashtag(niche: str) -> str:
-    plain = unicodedata.normalize("NFKD", niche).encode("ascii", "ignore").decode()
-    return re.sub(r"[^a-zA-Z0-9]", "", plain).lower()
 
 
 # ---------------------------------------------------------------- Instagram

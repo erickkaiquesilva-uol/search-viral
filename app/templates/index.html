@@ -11,6 +11,7 @@
   <div class="brand">🔥 Search Viral</div>
   <nav class="tabs" role="tablist">
     <button class="tab active" data-tab="viral">Virais por nicho</button>
+    <button class="tab" data-tab="shorts">Shorts</button>
     <button class="tab" data-tab="research">Relatório de tema</button>
     <button class="tab" data-tab="history">Histórico</button>
   </nav>
@@ -55,6 +56,63 @@
     </form>
     <div id="viral-progress" class="progress" hidden></div>
     <div id="viral-result"></div>
+  </section>
+
+  <!-- Shorts -->
+  <section id="tab-shorts" class="panel">
+    <div class="subtabs mode-switch">
+      <button class="active" data-mode="niche">Estudo por nicho</button>
+      <button data-mode="xray">Raio-X de um Short ou canal</button>
+    </div>
+
+    <form id="shorts-form" class="card form" data-mode="niche">
+      <div class="row">
+        <label class="grow">Nicho
+          <input name="niche" required minlength="2" maxlength="100" placeholder="ex.: receitas fit, finanças pessoais">
+        </label>
+        <label class="grow">Palavras extras (opcional)
+          <input name="keywords" maxlength="150" placeholder="ex.: low carb">
+        </label>
+      </div>
+      <div class="row">
+        <label>Período
+          <select name="period">
+            <option value="week">Última semana</option>
+            <option value="month">Último mês</option>
+            <option value="year" selected>Último ano</option>
+            <option value="any">Qualquer data</option>
+          </select>
+        </label>
+        <label>Qtd. de Shorts
+          <input type="number" name="limit" value="30" min="5" max="60">
+        </label>
+        <label class="check ai-toggle"><input type="checkbox" name="use_ai"> Gerar estudo com IA</label>
+        <button type="submit" class="primary">Estudar Shorts</button>
+      </div>
+      <p class="hint">Considera Shorts verticais de até 3 minutos. Para cada um, lê a fala segundo a segundo: gancho dos 3s, ritmo, final.</p>
+    </form>
+
+    <form id="xray-form" class="card form" data-mode="xray" hidden>
+      <div class="row">
+        <label class="grow">Link do Short, vídeo ou canal
+          <input name="url" required placeholder="https://www.youtube.com/shorts/...  ou  https://www.youtube.com/@canal">
+        </label>
+      </div>
+      <div class="row">
+        <label class="grow">Comparar com estudo de nicho (opcional)
+          <select name="benchmark_id"><option value="">Não comparar</option></select>
+        </label>
+        <label>Shorts do canal
+          <input type="number" name="limit" value="20" min="5" max="60">
+        </label>
+        <label class="check ai-toggle"><input type="checkbox" name="use_ai"> Análise com IA</label>
+        <button type="submit" class="primary">Analisar</button>
+      </div>
+      <p class="hint">Link de Short/vídeo: raio-X completo e comparação com o próprio canal. Link de canal: estudo de todos os Shorts recentes dele.</p>
+    </form>
+
+    <div id="shorts-progress" class="progress" hidden></div>
+    <div id="shorts-result"></div>
   </section>
 
   <!-- Relatório de tema -->

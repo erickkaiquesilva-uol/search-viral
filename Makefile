@@ -66,11 +66,12 @@ install: venv ## Instala/atualiza as dependências
 	@"$(PY)" -m pip install -q -r "$(ROOT)/requirements.txt"
 	@echo "Dependências instaladas."
 
+# "exec" faz o uvicorn substituir o shell: Ctrl+C/kill chegam direto nele e não sobra processo órfão na porta
 run: venv ## Sobe o servidor
-	@cd "$(ROOT)" && "$(PY)" -m uvicorn app.main:app --host "$(HOST)" --port "$(PORT)"
+	@cd "$(ROOT)" && exec "$(PY)" -m uvicorn app.main:app --host "$(HOST)" --port "$(PORT)"
 
 dev: venv ## Sobe o servidor recarregando ao salvar
-	@cd "$(ROOT)" && "$(PY)" -m uvicorn app.main:app --host "$(HOST)" --port "$(PORT)" --reload
+	@cd "$(ROOT)" && exec "$(PY)" -m uvicorn app.main:app --host "$(HOST)" --port "$(PORT)" --reload
 
 check: venv ## Verifica se o código compila e importa
 	@cd "$(ROOT)" && "$(PY)" -m compileall -q app && "$(PY)" -c "import app.main; print('ok')"

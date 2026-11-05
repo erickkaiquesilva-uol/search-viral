@@ -16,6 +16,11 @@ CREATE TABLE IF NOT EXISTS searches (
     created_at TEXT NOT NULL,
     result TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS transcripts (
+    video_id TEXT PRIMARY KEY,     -- legendas não mudam: baixar uma vez evita o bloqueio 429 do YouTube
+    words TEXT NOT NULL,           -- JSON [[segundo, palavra], ...] (lista vazia = vídeo sem legenda)
+    fetched_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS ai_cache (
     key TEXT PRIMARY KEY,
     response TEXT NOT NULL,
@@ -80,6 +85,11 @@ def list_searches(limit: int = 50) -> list[dict]:
     ]
 
 
+def update_search(search_id: int, result: dict) -> None:
+    with connect() as conn:
+        conn.execute("UPDATE searches SET result = ? WHERE id = ?", (json.dumps(result, ensure_ascii=False), search_id))
+
+
 def delete_search(search_id: int) -> None:
     with connect() as conn:
         conn.execute("DELETE FROM searches WHERE id = ?", (search_id,))
@@ -95,4 +105,18 @@ def cache_set(key: str, response: str) -> None:
     with connect() as conn:
         conn.execute(
             "INSERT OR REPLACE INTO ai_cache (key, response, created_at) VALUES (?, ?, ?)", (key, response, _now())
+        )
+
+
+def transcript_get(video_id: str) -> list | None:
+    with connect() as conn:
+        row = conn.execute("SELECT words FROM transcripts WHERE video_id = ?", (video_id,)).fetchone()
+    return json.loads(row["words"]) if row else None
+
+
+def transcript_set(video_id: str, words: list) -> None:
+    with connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO transcripts (video_id, words, fetched_at) VALUES (?, ?, ?)",
+            (video_id, json.dumps(words, ensure_ascii=False), _now()),
         )

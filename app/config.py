@@ -30,6 +30,9 @@ class Settings:
     yt_region: str = os.getenv("YT_REGION", "BR")
     yt_enrich_top: int = _int("YT_ENRICH_TOP", 25)
     yt_transcript_top: int = _int("YT_TRANSCRIPT_TOP", 8)
+    # Pausa (segundos) entre downloads de legenda; o YouTube bloqueia rajadas com HTTP 429
+    yt_caption_delay: float = float(os.getenv("YT_CAPTION_DELAY", "0.8") or 0.8)
+    shorts_limit_max: int = _int("SHORTS_LIMIT_MAX", 60)
 
     # Relativo à raiz do projeto, ou absoluto se você quiser guardar fora dele.
     db_path: Path = ROOT / os.path.expanduser(os.getenv("DB_PATH", "data/app.db"))

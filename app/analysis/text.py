@@ -35,6 +35,11 @@ def strip_accents(s: str) -> str:
     return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
 
 
+def niche_to_hashtag(niche: str) -> str:
+    """'Finanças Pessoais' -> 'financaspessoais'."""
+    return re.sub(r"[^a-zA-Z0-9]", "", strip_accents(niche)).lower()
+
+
 def tokenize(text: str) -> list[str]:
     return [w.lower() for w in WORD_RE.findall(text or "")]
 
