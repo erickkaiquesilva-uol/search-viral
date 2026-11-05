@@ -1,0 +1,33 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Xcode / Swift
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+.build/
+
+# Android / Kotlin
+.gradle/
+local.properties
+*.iml
+.idea/
+
+# Web
+node_modules/
+dist/
+.next/
+coverage/
+
+# Segredos e ambiente
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+
+# Logs
+*.log
