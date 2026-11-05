@@ -1,0 +1,97 @@
+:root {
+  --bg: #0f1115;
+  --card: #171a21;
+  --line: #262b36;
+  --text: #e6e8ee;
+  --muted: #8b93a7;
+  --accent: #ff5a36;
+  --accent-2: #ffb020;
+  --ok: #34c38f;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--accent-2); }
+code { background: #222733; padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+
+.topbar { display: flex; align-items: center; gap: 24px; padding: 12px 24px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+.brand { font-weight: 700; font-size: 18px; }
+.tabs { display: flex; gap: 4px; }
+.tab { background: none; border: 0; color: var(--muted); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.tab.active, .tab:hover { color: var(--text); background: var(--card); }
+.status { margin-left: auto; font-size: 12px; color: var(--muted); display: flex; gap: 10px; }
+.status .on { color: var(--ok); }
+
+main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.panel { display: none; }
+.panel.active { display: block; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 18px; }
+
+.form .row { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-bottom: 12px; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.form label.grow { flex: 1 1 260px; }
+.form label.check { flex-direction: row; align-items: center; gap: 6px; color: var(--text); padding-bottom: 8px; }
+.form fieldset { border: 1px solid var(--line); border-radius: 8px; display: flex; gap: 12px; padding: 4px 12px 0; }
+.form legend { font-size: 12px; color: var(--muted); padding: 0 4px; }
+input, select { background: #0f1218; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font-size: 14px; }
+input[type=number] { width: 90px; }
+input:focus, select:focus { outline: 1px solid var(--accent); }
+.disabled { opacity: .45; }
+.hint { font-size: 12px; color: var(--muted); margin: 0; }
+
+button { cursor: pointer; border-radius: 8px; font-size: 14px; }
+button.primary { background: var(--accent); color: #fff; border: 0; padding: 10px 18px; font-weight: 600; }
+button.primary:disabled { opacity: .5; cursor: wait; }
+button.ghost { background: none; border: 1px solid var(--line); color: var(--text); padding: 6px 12px; }
+button.ghost:hover { border-color: var(--muted); }
+
+.progress { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.progress div::before { content: "› "; color: var(--accent); }
+.progress div:last-child { color: var(--text); }
+.progress .spin::after { content: " ⏳"; }
+.error { color: #ff6b6b; }
+
+.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.toolbar .spacer { flex: 1; }
+.subtabs { display: flex; gap: 4px; }
+.subtabs button { background: none; border: 1px solid var(--line); color: var(--muted); padding: 6px 12px; }
+.subtabs button.active { color: var(--text); border-color: var(--accent); }
+
+.warn { background: #2a2113; border: 1px solid #5a4416; color: #f3d28b; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 13px; }
+
+/* relatório */
+.report h1 { font-size: 24px; margin-top: 0; }
+.report h2 { font-size: 19px; border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-top: 28px; }
+.report h3 { font-size: 16px; }
+.report table { border-collapse: collapse; width: 100%; font-size: 13px; display: block; overflow-x: auto; }
+.report th, .report td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.report th { background: #1e222b; }
+.report blockquote { margin: 0 0 6px; padding: 6px 12px; border-left: 3px solid var(--accent-2); color: #f3d28b; background: #221d12; }
+.report li { margin-bottom: 4px; }
+
+/* cards de referência */
+.filters { display: flex; gap: 8px; margin-bottom: 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.post { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+.post .thumb { aspect-ratio: 16/9; background: #0b0d11 center/cover no-repeat; position: relative; }
+.post .score { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.75); padding: 2px 8px; border-radius: 20px; font-weight: 700; font-size: 13px; }
+.post .score.hot { background: var(--accent); }
+.post .plat { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.75); padding: 2px 8px; border-radius: 20px; font-size: 12px; }
+.post .body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.post .title { font-weight: 600; font-size: 14px; color: var(--text); text-decoration: none; }
+.post .title:hover { text-decoration: underline; }
+.post .meta { font-size: 12px; color: var(--muted); }
+.post .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 12px; }
+.post .stats b { display: block; font-size: 13px; color: var(--text); }
+.post .opening { font-size: 12px; color: #c9cede; font-style: italic; border-left: 2px solid var(--accent-2); padding-left: 8px; }
+.badges { display: flex; flex-wrap: wrap; gap: 4px; }
+.badge { font-size: 11px; background: #232836; border: 1px solid var(--line); padding: 1px 7px; border-radius: 20px; color: #c9cede; }
+.badge.fmt { border-color: #3a4f7a; }
+
+.history { list-style: none; margin: 0; padding: 0; }
+.history li { display: flex; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+.history li:last-child { border-bottom: 0; }
+.history .kind { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #232836; min-width: 70px; text-align: center; }
+.history .q { flex: 1; }
+.history .date { color: var(--muted); font-size: 12px; }
+.empty { color: var(--muted); }
